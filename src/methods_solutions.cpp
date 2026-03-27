@@ -56,3 +56,30 @@ double nyuton(double a, double b, double E){
     printf("p: %f\n",fabs(xn - xn_1));
     return xn;
 }
+
+double iter(double a, double b, double E){
+    if (fun(a) == 0) printf("%f\n",a);
+    if (fun(b) == 0) printf("%f\n",b);
+    double x0 = (a + b) / 2;
+    double x = x0;
+    double x_prev;
+    int max_iter = 1000;
+    int iter = 0;
+    while (iter < max_iter){
+        double fp = funp(x);
+        if (fabs(fp) < 1e-10){
+            printf("-> 0\n");
+            return INFINITY;
+        }
+        double lambda = 1.0 / fp;
+        x_prev = x;
+        x = x_prev - lambda * fun(x_prev);
+        if (fabs(x - x_prev) < E){
+            printf("p: %f\n", fabs(x - x_prev));
+            return x;
+        }
+        iter++;
+    }
+    printf(">%d\n", max_iter);
+    return x;
+}
