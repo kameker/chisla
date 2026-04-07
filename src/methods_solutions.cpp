@@ -38,7 +38,7 @@ double horde(double a, double b, double E){
             xn1 = xn - (b-xn) / (fun(b) - fun(xn)) * fun(xn);
         }
     }
-    printf("p: %f\n", fabs(xn1-xn));
+    //printf("p: %f\n", fabs(xn1-xn));
     return xn1;   
 }
 
@@ -53,7 +53,7 @@ double nyuton(double a, double b, double E){
         xn_1 = xn;
         xn = xn_1 - fun(xn_1)/funp(xn_1);
     }
-    printf("p: %f\n",fabs(xn - xn_1));
+    //printf("p: %f\n",fabs(xn - xn_1));
     return xn;
 }
 
@@ -75,11 +75,25 @@ double iter(double a, double b, double E){
         x_prev = x;
         x = x_prev - lambda * fun(x_prev);
         if (fabs(x - x_prev) < E){
-            printf("p: %f\n", fabs(x - x_prev));
+            //printf("p: %f\n", fabs(x - x_prev));
             return x;
         }
         iter++;
     }
     printf(">%d\n", max_iter);
     return x;
+}
+double lagranj(double* xs, double* ys, int n, double x){
+    double result = 0.0;
+    for (int i = 0; i < n; i++){
+        double basis = 1.0;
+        for (int j = 0; j < n; j++){
+            if (j != i){
+                basis *= (x - xs[j]) / (xs[i] - xs[j]);
+            }
+        }
+        result += ys[i] * basis;
+    }
+
+    return result;
 }
