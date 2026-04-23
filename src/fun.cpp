@@ -13,6 +13,26 @@ double funp(double x){
 double funpp(double x){
     return -8*sin(2*x)-5*sin(2*x)*cos(x) - 4 * cos(2*x) * sin(x);
 }
+double fun3(double x){
+    return 4 * x * exp(2 * x);
+}
+double fun3pp(double x){
+    return 16 * exp(2 * x) + 8 * x * exp(2 * x);
+}
+
+double fun4(double x){
+    return sin(x) * sinh(x);
+}
+double fun4pp(double x){
+    return x; ///////////
+}
+
+double fun5(double x){
+    return 12 * pow(sin(x), 3) / pow(cos(x), 3 / 5);
+}
+double fun5pp(double x){
+    return x; /////////////
+}
 
 void save_plot(const char* filename, double* y_values, int count, int width, int height){
     double y_min = y_values[0];

@@ -97,3 +97,42 @@ double lagranj(double* xs, double* ys, int n, double x){
 
     return result;
 }
+double rectangle(double end, double start, int n){
+    double r = 0;
+    double h = (end - start) / n;
+    for (int i = 0 ; i < n ; i++){
+        r += fun3(start + h / 2 + i * h);
+    }
+    //printf("p = %f\n", (end - start) * h * h / 24);
+    return r * h;
+}
+double trapezoid(double end, double start, int n){
+    double r = 0;
+    double h = (end - start) / n;
+    for (int i = 1; i < n; i++) {
+        r += fun4(start + i * h);
+    }
+    return h * ((fun4(end) + fun4(start)) / 2.0 + r);
+}
+double simpson(double end, double start, int n){
+    if (n % 2 != 0) n++;
+    
+    double h = (end - start) / n;
+    double r = fun5(start) + fun5(end);
+    double odd_sum = 0;   
+    double even_sum = 0;  
+    
+    for (int i = 1; i < n; i++) {
+        if (i % 2 == 1) {
+            odd_sum += fun5(start + i * h);
+        } else {
+            even_sum += fun5(start + i * h);
+        }
+    }
+    
+    r += 4 * odd_sum + 2 * even_sum;
+    return r * h / 3;
+}
+double renge(double a, double b){
+    return fabs(a - b) / 3;
+}

@@ -2,18 +2,16 @@
 #include <cmath>
 #include "methods_solutions.hpp"
 #include "fun.hpp"
+# define M_PI           3.14159265358979323846
+#define N 100000
 
 
 int main(){
-    double xs[6]{0.0, 0.2, 0.4, 0.6, 0.8, 1.0};
-    double ys[6]{1.469, 1.033, 0.653, 0.261, -0.391, -2.075};
-    printf("%f\n", lagranj(xs,ys,6,1));
-    int y_count = 1920;
-    double y_values[y_count];
-    for (int i = 0; i < y_count; i++){
-        y_values[i] = lagranj(xs,ys,6,(double)i);
-    }
-    
-    save_plot("imgs/graph.bmp", y_values, y_count, 1920, 1080);
+    printf("Rectangle: %f\n", rectangle(0.5, 0, N));
+    printf("Error Rectangle: %f\n", renge(rectangle(0.5, 0, N),rectangle(0.5, 0, N) / 2));
+    printf("Trapezoid: %f\n", trapezoid(2, 0, N));
+    printf("Error Trapezoid: %f\n", renge(trapezoid(2, 0, N),trapezoid(2, 0, N / 2)));
+    printf("Simpson: %f\n", simpson(M_PI / 3, 0, N));
+    printf("Error Simpson: %f\n", renge(simpson(M_PI / 3, 0, N), simpson(M_PI / 3, 0, N / 2)));
     return 0;
 }
