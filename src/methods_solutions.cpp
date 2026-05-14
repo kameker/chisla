@@ -136,3 +136,43 @@ double simpson(double end, double start, int n){
 double renge(double a, double b){
     return fabs(a - b) / 3;
 }
+double* method_gause(double matrix[3][3], double vector[3]){
+    double x1, x2, x3;
+    plus(matrix, vector, 0, 1, -matrix[1][0] / matrix[0][0]);
+    plus(matrix, vector, 0, 2, -matrix[2][0] / matrix[0][0]);
+    plus(matrix, vector, 1, 2, -matrix[2][1] / matrix[1][1]);
+    x3 = vector[2] / matrix[2][2];
+    x2 = (vector[1] - matrix[1][2] * x3) / matrix[1][1];
+    x1 = (vector[0] - matrix[0][2] * x3 - matrix[0][1] * x2) / matrix[0][0];
+    return new double[3]{x1, x2, x3};
+    /*plus(matrix, vector, 2, 1, -matrix[1][2] / matrix[2][2]);
+    plus(matrix, vector, 2, 0, -matrix[0][2] / matrix[2][2]);
+    plus(matrix, vector, 1, 0, -matrix[0][1] / matrix[1][1]);
+    printf("x1 = %f\n", vector[0] / matrix[0][0]);
+    printf("x2 = %f\n", vector[1] / matrix[1][1]);
+    printf("x3 = %f\n", vector[2] / matrix[2][2]);
+    */
+}
+double* method_gause_z(double matrix[3][3], double vector[3], double epsilon){
+    double x1p,x2p,x3p, t1, t2, t3;
+    x1p = 0;
+    x2p = 0;
+    x3p = 0;
+    do {
+        t1 = x1p;
+        t2 = x2p;
+        t3 = x3p;
+        x1p = 1 / matrix[0][0] * (vector[0] - matrix[0][1] * t2 - matrix[0][2] * t3);
+        x2p = 1 / matrix[1][1] * (vector[1] - matrix[1][0] * x1p - matrix[1][2] * t3);
+        x3p = 1 / matrix[2][2] * (vector[2] - matrix[2][0] * x1p - matrix[2][1] * x2p);
+        
+    } while (fmax(fabs(x1p - t1), fmax(fabs(x2p - t2), fabs(x3p - t3))) > epsilon);
+    return new double[3]{x1p, x2p, x3p};
+}
+void plus(double matrix[3][3], double vector[3],
+     int k1, int k2, double m){
+        vector[k2] += vector[k1] * m;
+        matrix[k2][0] += matrix[k1][0] * m;
+        matrix[k2][1] += matrix[k1][1] * m;
+        matrix[k2][2] += matrix[k1][2] * m;
+}
