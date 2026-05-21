@@ -11,7 +11,7 @@ int main(){
     double step1 = 0.001;
     int steps1 = (int)((end1 - start1) / step1) + 1;
     printf("%d\n",steps1);
-    double* result1 = anton(fun28, start1, end1, y01, step1, steps1);
+    double* result1 = anton(fun28, start1, y01, step1, steps1);
     save_plot("anton.bmp", result1,steps1, 800, 600);
     delete[] result1;
 
@@ -20,7 +20,7 @@ int main(){
     double end2 = 20;
     double step2 = 0.01;
     int steps2 = (int)((end2 - start2) / step2) + 1;
-    double* result2 = renge_kuta(f13, start2, end2, y02, step2, steps2);
+    double* result2 = renge_kuta(f13, start2, y02, step2, steps2);
     save_plot("renge_kuta.bmp", result2,steps2, 800, 600);
     delete[] result2;
     return 0;

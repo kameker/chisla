@@ -2,13 +2,13 @@
 #include "fun.hpp"
 #include <stdio.h>
 #include <math.h>
-double bisec(double a, double b, double E){
+double bisec(FuncPtr1 f, double a, double b, double E){
     double temp;
-    if (fun(a) == 0) printf("%f\n",a);
-    if (fun(b) == 0) printf("%f\n",b);
+    if (f(a) == 0) printf("%f\n",a);
+    if (f(b) == 0) printf("%f\n",b);
     while (b - a > E){
         temp = a + (b - a) / 2;
-        if (fun(a) * fun(temp) < 0) {
+        if (f(a) * f(temp) < 0) {
             b = temp;
         }
         else{
@@ -18,46 +18,46 @@ double bisec(double a, double b, double E){
     return temp;
 }
 
-double horde(double a, double b, double E){
-    if (fun(a) == 0) printf("%f\n",a);
-    if (fun(b) == 0) printf("%f\n",b);
+double horde(FuncPtr1 f, double a, double b, double E){
+    if (f(a) == 0) printf("%f\n",a);
+    if (f(b) == 0) printf("%f\n",b);
     double xn,xn1;
-    if (fun(a) > 0 && fun(b) < 0){
-        xn = a - (b - a)/(fun(b) -fun(a))*fun(a);
-        xn1 = xn - (xn-a) / (fun(xn) - fun(a)) * fun(xn);
+    if (f(a) > 0 && f(b) < 0){
+        xn = a - (b - a)/(f(b) -f(a))*f(a);
+        xn1 = xn - (xn-a) / (f(xn) - f(a)) * f(xn);
         while (fabs(xn - xn1) > E){
             xn = xn1;
-            xn1 = xn - (xn-a) / (fun(xn) - fun(a)) * fun(xn);
+            xn1 = xn - (xn-a) / (f(xn) - f(a)) * f(xn);
         }
     }
-    if (fun(a) < 0 && fun(b) > 0){
-        xn = a - (b - a)/(fun(b) - fun(a)) * fun(a);
-        xn1 = xn - (b-xn) / (fun(b) - fun(xn)) * fun(xn);
+    if (f(a) < 0 && f(b) > 0){
+        xn = a - (b - a)/(f(b) - f(a)) * f(a);
+        xn1 = xn - (b-xn) / (f(b) - f(xn)) * f(xn);
         while (fabs(xn - xn1) > E){
             xn = xn1;
-            xn1 = xn - (b-xn) / (fun(b) - fun(xn)) * fun(xn);
+            xn1 = xn - (b-xn) / (f(b) - f(xn)) * f(xn);
         }
     }
     //printf("p: %f\n", fabs(xn1-xn));
     return xn1;   
 }
 
-double nyuton(double a, double b, double E){
-    if (fun(a) == 0) printf("%f\n",a);
-    if (fun(b) == 0) printf("%f\n",b);
+double nyuton(FuncPtr1 f,FuncPtr1 f2, double a, double b, double E){
+    if (f(a) == 0) printf("%f\n",a);
+    if (f(b) == 0) printf("%f\n",b);
     double xn, xn_1, x0;
     x0 = (b+a)/2;
-    xn_1 = x0 - fun(x0) / funp(x0);
-    xn = xn_1 - fun(xn_1)/funp(xn_1);
+    xn_1 = x0 - f(x0) / f2(x0);
+    xn = xn_1 - f(xn_1)/f2(xn_1);
     while (fabs(xn - xn_1) > E){
         xn_1 = xn;
-        xn = xn_1 - fun(xn_1)/funp(xn_1);
+        xn = xn_1 - f(xn_1)/f(xn_1);
     }
     //printf("p: %f\n",fabs(xn - xn_1));
     return xn;
 }
 
-double iter(double a, double b, double E){
+double iter(FuncPtr1 f, double a, double b, double E){
     if (fun(a) == 0) printf("%f\n",a);
     if (fun(b) == 0) printf("%f\n",b);
     double x0 = (a + b) / 2;
@@ -66,7 +66,7 @@ double iter(double a, double b, double E){
     int max_iter = 1000;
     int iter = 0;
     while (iter < max_iter){
-        double fp = funp(x);
+        double fp = f(x);
         if (fabs(fp) < 1e-10){
             printf("-> 0\n");
             return INFINITY;
@@ -97,36 +97,36 @@ double lagranj(double* xs, double* ys, int n, double x){
 
     return result;
 }
-double rectangle(double end, double start, int n){
+double rectangle(FuncPtr1 f, double end, double start, int n){
     double r = 0;
     double h = (end - start) / n;
     for (int i = 0 ; i < n ; i++){
-        r += fun3(start + h / 2 + i * h);
+        r += f(start + h / 2 + i * h);
     }
     //printf("p = %f\n", (end - start) * h * h / 24);
     return r * h;
 }
-double trapezoid(double end, double start, int n){
+double trapezoid(FuncPtr1 f, double end, double start, int n){
     double r = 0;
     double h = (end - start) / n;
     for (int i = 1; i < n; i++) {
-        r += fun4(start + i * h);
+        r += f(start + i * h);
     }
-    return h * ((fun4(end) + fun4(start)) / 2.0 + r);
+    return h * ((f(end) + f(start)) / 2.0 + r);
 }
-double simpson(double end, double start, int n){
+double simpson(FuncPtr1 f, double end, double start, int n){
     if (n % 2 != 0) n++;
     
     double h = (end - start) / n;
-    double r = fun5(start) + fun5(end);
+    double r = f(start) + f(end);
     double odd_sum = 0;   
     double even_sum = 0;  
     
     for (int i = 1; i < n; i++) {
         if (i % 2 == 1) {
-            odd_sum += fun5(start + i * h);
+            odd_sum += f(start + i * h);
         } else {
-            even_sum += fun5(start + i * h);
+            even_sum += f(start + i * h);
         }
     }
     
@@ -176,7 +176,7 @@ void plus(double matrix[3][3], double vector[3],
         matrix[k2][1] += matrix[k1][1] * m;
         matrix[k2][2] += matrix[k1][2] * m;
 }
-double* anton(FuncPtr f, double start, double end, double y0, double step, int steps){
+double* anton(FuncPtr2 f, double start, double y0, double step, int steps){
     double* result = new double[steps];
     double x = start;
     double y = y0;
@@ -188,7 +188,7 @@ double* anton(FuncPtr f, double start, double end, double y0, double step, int s
     };
     return result;
 }
-double* renge_kuta(FuncPtr f, double start, double end, double y0, double step, int steps){
+double* renge_kuta(FuncPtr2 f, double start, double y0, double step, int steps){
     double* result = new double[steps];
     double x = start;
     double y = y0;
