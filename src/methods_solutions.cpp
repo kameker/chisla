@@ -176,3 +176,32 @@ void plus(double matrix[3][3], double vector[3],
         matrix[k2][1] += matrix[k1][1] * m;
         matrix[k2][2] += matrix[k1][2] * m;
 }
+double* anton(FuncPtr f, double start, double end, double y0, double step, int steps){
+    double* result = new double[steps];
+    double x = start;
+    double y = y0;
+    for (int i = 0 ; i < steps; i++){
+        y = y + step * f(x, y);
+        x = x + step;
+        result[i] = y;
+        //printf("%f\n", y);
+    };
+    return result;
+}
+double* renge_kuta(FuncPtr f, double start, double end, double y0, double step, int steps){
+    double* result = new double[steps];
+    double x = start;
+    double y = y0;
+    double k1,k2,k3,k4;
+    for (int i = 0 ; i < steps; i++){
+        k1 = f(x, y);
+        k2 = f(x + step / 2, y + (step / 2) * k1);
+        k3 = f(x + step / 2, y + (step / 2) * k2);
+        k4 = f(x + step, y + step * k3);
+        y = y + (step / 6.0) * (k1 + 2 * k2 + 2 * k3 + k4);
+        x += step;
+        //printf("%f\n", y);
+        result[i] = y;
+    }
+    return result;
+}

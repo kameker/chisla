@@ -10,3 +10,7 @@ double fun4pp(double x);
 
 double fun5(double x);
 double fun6pp(double x);
+
+double fun28(double x, double y);
+
+double f13(double x, double y);

@@ -11,4 +11,7 @@ void gauss(double** A, double* b, double* x, int n);
 double* method_gause(double matrix[3][3], double vector[3]);
 void plus(double matrix[3][3], double vector[3],
      int k1, int k2, double m);
+typedef double (*FuncPtr)(double, double);
 double* method_gause_z(double matrix[3][3], double vector[3], double epsilon);
+double* anton(FuncPtr f, double start, double end, double y0, double step, int steps);
+double* renge_kuta(FuncPtr f, double start, double end, double y0, double step, int steps);

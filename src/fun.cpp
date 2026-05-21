@@ -131,3 +131,10 @@ void save_plot(const char* filename, double* y_values, int count, int width, int
 
     printf("Plot saved: %s (%dx%d, %d points)\n", filename, width, height, count);
 }
+
+double fun28(double x, double y){
+    return x * y * (x * x * y + 2);
+}
+double f13(double x, double y){
+    return y*y*y / 2 - y/x;
+}
