@@ -205,3 +205,8 @@ double* renge_kuta(FuncPtr2 f, double start, double y0, double step, int steps){
     }
     return result;
 }
+
+double сauchy(FuncPtr1 f, double *u0, double x0, double xn, double h){
+
+    return 0;
+}
